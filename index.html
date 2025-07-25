@@ -2,21 +2,22 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Телесуфлёр (прозрачный)</title>
+  <title>Телесуфлёр</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: transparent;
-      overflow: hidden;
+      height: 100%;
       font-family: sans-serif;
+      background: black;
+      color: white;
     }
 
     textarea, #controls {
       width: 100%;
       padding: 10px;
       box-sizing: border-box;
-      background: rgba(0, 0, 0, 0.5); /* затемнённая панель */
+      background: #222;
       color: white;
     }
 
@@ -34,7 +35,7 @@
       white-space: pre-wrap;
       overflow-y: auto;
       display: none;
-      background: transparent;
+      background: black;
       z-index: 1000;
     }
 
@@ -46,4 +47,64 @@
 </head>
 <body>
 
-  <textarea id="input" rows="6" placeholder="В
+  <textarea id="input" rows="6" placeholder="Введите текст для телесуфлёра..."></textarea>
+
+  <div id="controls">
+    <button onclick="startScroll()">▶ Пуск</button>
+    <button onclick="stopScroll()">⏹ Стоп</button>
+    <label>Скорость:
+      <input type="range" id="speed" min="0.5" max="5" step="0.1" value="1">
+    </label>
+    <button onclick="toggleFullscreen()">⛶ Полный экран</button>
+  </div>
+
+  <div id="display"></div>
+
+  <script>
+    const input = document.getElementById("input");
+    const display = document.getElementById("display");
+    const speedInput = document.getElementById("speed");
+    let scrollTimer;
+
+    function startScroll() {
+      const text = input.value.trim();
+      if (!text) return alert("Введите текст!");
+
+      display.textContent = text;
+      display.style.display = "block";
+      input.style.display = "none";
+      document.getElementById("controls").style.display = "none";
+      display.scrollTop = 0;
+
+      const speed = parseFloat(speedInput.value);
+      scrollTimer = setInterval(() => {
+        display.scrollTop += 1;
+      }, 100 / speed);
+
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    }
+
+    function stopScroll() {
+      clearInterval(scrollTimer);
+      display.style.display = "none";
+      input.style.display = "block";
+      document.getElementById("controls").style.display = "block";
+
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+
+</body>
+</html>
