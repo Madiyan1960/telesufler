@@ -2,13 +2,12 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Телесуфлёр</title>
+  <title>Прозрачный телесуфлёр</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      background: black;
+      background: transparent;
       color: white;
       font-family: sans-serif;
       overflow: hidden;
@@ -17,13 +16,13 @@
       width: 100%;
       padding: 10px;
       box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.3);
     }
     #input {
       height: 20vh;
       font-size: 18px;
     }
     #controls {
-      background: #222;
       text-align: center;
     }
     #display {
@@ -34,6 +33,11 @@
       white-space: pre-wrap;
       overflow-y: auto;
       display: none;
+      background: transparent;
+    }
+    button, input[type="range"] {
+      font-size: 1rem;
+      padding: 4px 8px;
     }
   </style>
 </head>
@@ -71,7 +75,6 @@
         display.scrollTop += 1;
       }, 100 / speed);
 
-      // Включить полноэкранный режим
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => {
           console.warn("Не удалось включить полноэкранный режим:", err);
@@ -85,7 +88,6 @@
       input.style.display = "block";
       document.getElementById("controls").style.display = "block";
 
-      // Выход из полноэкранного режима
       if (document.fullscreenElement) {
         document.exitFullscreen();
       }
