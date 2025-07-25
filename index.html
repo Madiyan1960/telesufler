@@ -2,104 +2,48 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Прозрачный телесуфлёр</title>
+  <title>Телесуфлёр (прозрачный)</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       background: transparent;
-      color: white;
-      font-family: sans-serif;
       overflow: hidden;
+      font-family: sans-serif;
     }
-    #input, #controls {
+
+    textarea, #controls {
       width: 100%;
       padding: 10px;
       box-sizing: border-box;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.5); /* затемнённая панель */
+      color: white;
     }
-    #input {
-      height: 20vh;
-      font-size: 18px;
-    }
-    #controls {
-      text-align: center;
-    }
+
     #display {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
       height: 100vh;
-      padding: 30px;
+      padding: 40px;
+      box-sizing: border-box;
+      color: white;
       font-size: 40px;
-      line-height: 1.5;
+      line-height: 1.6;
       white-space: pre-wrap;
       overflow-y: auto;
       display: none;
       background: transparent;
+      z-index: 1000;
     }
+
     button, input[type="range"] {
       font-size: 1rem;
-      padding: 4px 8px;
+      margin: 5px;
     }
   </style>
 </head>
 <body>
-  <textarea id="input" placeholder="Введите текст..."></textarea>
-  <div id="controls">
-    <button onclick="startScroll()">▶ Пуск</button>
-    <button onclick="stopScroll()">⏹ Стоп</button>
-    <label>Скорость: <input type="range" id="speed" min="0.5" max="5" step="0.1" value="1"></label>
-    <button onclick="toggleFullscreen()">⛶ Полный экран</button>
-  </div>
-  <div id="display"></div>
 
-  <script>
-    const input = document.getElementById("input");
-    const display = document.getElementById("display");
-    const speedControl = document.getElementById("speed");
-    let scrollInterval;
-
-    function startScroll() {
-      const text = input.value.trim();
-      if (text === "") {
-        alert("Введите текст для телесуфлёра!");
-        return;
-      }
-
-      display.textContent = text;
-      display.style.display = "block";
-      input.style.display = "none";
-      document.getElementById("controls").style.display = "none";
-      display.scrollTop = 0;
-
-      const speed = parseFloat(speedControl.value);
-      scrollInterval = setInterval(() => {
-        display.scrollTop += 1;
-      }, 100 / speed);
-
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-          console.warn("Не удалось включить полноэкранный режим:", err);
-        });
-      }
-    }
-
-    function stopScroll() {
-      clearInterval(scrollInterval);
-      display.style.display = "none";
-      input.style.display = "block";
-      document.getElementById("controls").style.display = "block";
-
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      }
-    }
-
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    }
-  </script>
-</body>
-</html>
+  <textarea id="input" rows="6" placeholder="В
