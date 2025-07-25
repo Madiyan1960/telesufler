@@ -1,41 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <title>Полный экран</title>
-</head>
-<body style="background:black; color:white; display:flex; justify-content:center; align-items:center; height:100vh;">
-  <button onclick="toggleFullScreen()" style="font-size:2em;">⛶ Полный экран</button>
-
-  <script>
-    function toggleFullScreen() {
-      const elem = document.documentElement;
-      if (!document.fullscreenElement &&
-          !document.webkitFullscreenElement &&
-          !document.mozFullScreenElement &&
-          !document.msFullscreenElement) {
-
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-          elem.webkitRequestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-          elem.mozRequestFullScreen();
-        } else if (elem.msRequestFullscreen) {
-          elem.msRequestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Телесуфлёр</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
-  </script>
-</body>
-</html>
+    textarea {
+      height: 15vh;
+      resize: none;
+      font-size: 1rem;
+      padding: 6px;
+      border: none;
+      outline: none;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      padding: 5px;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: #222;
+    }
+    button, input[type="range"] {
+      font-size: 0.9rem;
+      padding: 4px 6px;
+    }
+    #display {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 2rem;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .dark {
+      background: #111;
+      color: white;
+    }
+    .light {
+      background: #fff;
+      color: black;
+    }
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body class="dark">
+  <textarea id="input" placeholder="Введите текст..."></textarea>
+
+  <div class="controls" id="controlPanel">
+    <button onclick="start()">▶ Пуск</button>
+    <button onclick="pause()">⏸ Пауза</button>
+    <button onclick="toggleFullScreen()">⛶ Полный экран</button>
+    <button onclick="toggleTheme()">🌙/☀️ Тема</button>
+    <label>Скорость: <input type="range" min="0.5" max="5" value="1" step="0.1" id="speed"></label>
+    <label>Размер: <input type="range" min="20" max="80" value="40" step="2" id="fontsize"></label>
+  <
