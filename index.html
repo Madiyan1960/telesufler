@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Телесуфлёр</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    textarea {
+      height: 30vh;
+      resize: none;
+      font-size: 1.2rem;
+      padding: 10px;
+      border: none;
+      outline: none;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: #222;
+    }
+    button, input[type="range"], select {
+      font-size: 1rem;
+      padding: 5px 10px;
+    }
+    #display {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 2rem;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .dark {
+      background: #111;
+      color: white;
+    }
+    .light {
+      background: #fff;
+      color: black;
+    }
+  </style>
+</head>
+<body class="dark">
+  <textarea id="input" placeholder="Введите текст...">Добро пожаловать! Это телесуфлёр. Введите сюда свой текст и нажмите Пуск.</textarea>
+  <div class="controls">
+    <button onclick="start()">▶ Пуск</button>
+    <button onclick="pause()">⏸ Пауза</button>
+    <button onclick="toggleFullScreen()">⛶ Полный экран</button>
+    <button onclick="toggleTheme()">🌙/☀️ Тема</button>
+    <label>Скорость: <input type="range" min="0.5" max="5" value="1" step="0.1" id="speed"></label>
+    <label>Размер: <input type="range" min="20" max="80" value="40" step="2" id="fontsize"></label>
+  </div>
+  <div id="display"></div>
+
+  <script>
+    const input = document.getElementById('input');
+    const display = document.getElementById('display');
+    const speedInput = document.getElementById('speed');
+    const fontSizeInput = document.getElementById('fontsize');
+    let scrollInterval;
+
+    function updateFontSize() {
+      display.style.fontSize = fontSizeInput.value + 'px';
+    }
+
+    fontSizeInput.addEventListener('input', updateFontSize);
+
+    function start() {
+      display.innerText = input.value;
+      updateFontSize();
+      if (scrollInterval) clearInterval(scrollInterval);
+      scrollInterval = setInterval(() => {
+        display.scrollTop += 1;
+      }, 100 / parseFloat(speedInput.value));
+    }
+
+    function pause() {
+      clearInterval(scrollInterval);
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      document.body.classList.toggle('light');
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
