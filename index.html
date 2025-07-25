@@ -40,6 +40,7 @@
       font-size: 2rem;
       padding: 20px;
       line-height: 1.6;
+      white-space: pre-wrap;
     }
     .dark {
       background: #111;
@@ -64,4 +65,18 @@
     <button onclick="toggleTheme()">🌙/☀️ Тема</button>
     <label>Скорость: <input type="range" min="0.5" max="5" value="1" step="0.1" id="speed"></label>
     <label>Размер: <input type="range" min="20" max="80" value="40" step="2" id="fontsize"></label>
-  <
+  </div>
+
+  <div id="display"></div>
+
+  <script>
+    const input = document.getElementById('input');
+    const display = document.getElementById('display');
+    const speedInput = document.getElementById('speed');
+    const fontSizeInput = document.getElementById('fontsize');
+    const controlPanel = document.getElementById('controlPanel');
+    let scrollInterval;
+
+    // Загрузка сохранённого текста
+    window.addEventListener('load', () => {
+      const savedText = localStorage.getItem('teleprompterText');
