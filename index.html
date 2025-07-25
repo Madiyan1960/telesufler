@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Телесуфлёр</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden;
       background: black;
       color: white;
       font-family: sans-serif;
+      overflow: hidden;
     }
     #input, #controls {
       width: 100%;
-      box-sizing: border-box;
       padding: 10px;
+      box-sizing: border-box;
     }
     #input {
       height: 20vh;
@@ -27,12 +27,12 @@
       text-align: center;
     }
     #display {
-      height: 100%;
-      overflow-y: auto;
-      font-size: 40px;
+      height: 100vh;
       padding: 30px;
-      line-height: 1.6;
+      font-size: 40px;
+      line-height: 1.5;
       white-space: pre-wrap;
+      overflow-y: auto;
       display: none;
     }
   </style>
@@ -40,53 +40,64 @@
 <body>
   <textarea id="input" placeholder="Введите текст..."></textarea>
   <div id="controls">
-    <button onclick="start()">▶ Пуск</button>
-    <button onclick="stop()">⏹ Стоп</button>
+    <button onclick="startScroll()">▶ Пуск</button>
+    <button onclick="stopScroll()">⏹ Стоп</button>
     <label>Скорость: <input type="range" id="speed" min="0.5" max="5" step="0.1" value="1"></label>
-    <button onclick="toggleFullScreen()">⛶ Полный экран</button>
+    <button onclick="toggleFullscreen()">⛶ Полный экран</button>
   </div>
   <div id="display"></div>
 
   <script>
     const input = document.getElementById("input");
     const display = document.getElementById("display");
-    const speed = document.getElementById("speed");
-    let scrollTimer;
+    const speedControl = document.getElementById("speed");
+    let scrollInterval;
 
-    function start() {
-      display.textContent = input.value.trim();
-      display.scrollTop = 0;
+    function startScroll() {
+      const text = input.value.trim();
+      if (text === "") {
+        alert("Введите текст для телесуфлёра!");
+        return;
+      }
+
+      display.textContent = text;
+      display.style.display = "block";
       input.style.display = "none";
       document.getElementById("controls").style.display = "none";
-      display.style.display = "block";
+      display.scrollTop = 0;
 
-      if (scrollTimer) clearInterval(scrollTimer);
-      scrollTimer = setInterval(() => {
+      const speed = parseFloat(speedControl.value);
+      scrollInterval = setInterval(() => {
         display.scrollTop += 1;
-      }, 100 / parseFloat(speed.value));
+      }, 100 / speed);
 
-      enterFullScreen();
-    }
-
-    function stop() {
-      clearInterval(scrollTimer);
-      display.style.display = "none";
-      input.style.display = "block";
-      document.getElementById("controls").style.display = "block";
-      exitFullScreen();
-    }
-
-    function toggleFullScreen() {
+      // Включить полноэкранный режим
       if (!document.fullscreenElement) {
-        enterFullScreen();
-      } else {
-        exitFullScreen();
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn("Не удалось включить полноэкранный режим:", err);
+        });
       }
     }
 
-    function enterFullScreen() {
-      const elem = document.documentElement;
-      if (elem.requestFullscreen) elem.requestFullscreen();
+    function stopScroll() {
+      clearInterval(scrollInterval);
+      display.style.display = "none";
+      input.style.display = "block";
+      document.getElementById("controls").style.display = "block";
+
+      // Выход из полноэкранного режима
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
     }
 
-    function exitFullScreen() {
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
